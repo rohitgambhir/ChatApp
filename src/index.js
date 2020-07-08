@@ -1,7 +1,8 @@
  const path = require('path')
  const http = require('http')
 const express = require('express');
-const socketio = require('socket.io') 
+const socketio = require('socket.io') ;
+const Filter = require('bad-words');
 // this create instance of websocket to work with our server , it gives us a function back , to work in this server , we need to call it .
 const app = express();
 // create http ,http library and method available on it , led us create a server , though express do it underhood.
@@ -23,17 +24,26 @@ io.on('connection' , (socket)=>{
     // socket.emit('message' , msg)
     socket.emit('rohit' , msg);
     socket.broadcast.emit('rohit' , 'A new user has joined Cules');
-     socket.on('texts' , (txt)=> {
+     socket.on('sendMessage' , (txt , callback)=> {
         //   console.log(txt);
+        //  let's have bad words thing 
+            const filter = new Filter();
+            if(filter.isProfane(txt)){
+                 return callback('Profanity is not allowed!');
+            }
+
+
           io.emit('rohit' , txt);
+          callback(' Delivered!!');  // we have set acknowledgemnt to be sent to the one who is emitting , it process the data , then call that function . 
      })
     //  emitted by chat.js for sharing it's all cordinates.
-     socket.on('sendLocation' , (obj)=>{
+     socket.on('sendLocation' , (obj , callback)=>{
             //  io.emit('location' , obj); one way is this ,
             // io.emit('rohit' , `Location: ${obj.lat} , ${obj.long}`);
             //  to send map as well , use https://google.com/maps?q=0,0 
             // q means lat = 0 , long = 0;
             io.emit('rohit' , `https://google.com/maps?q=${obj.lat},${obj.long}`);
+            callback();
      })
 
 })
