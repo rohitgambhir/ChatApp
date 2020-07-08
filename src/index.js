@@ -22,8 +22,8 @@ io.on('connection' , (socket)=>{
     // server is emitting to particular client , the message of welcome , 
     // to send to every other client use io.emit
     // socket.emit('message' , msg)
-    socket.emit('rohit' , msg);
-    socket.broadcast.emit('rohit' , 'A new user has joined Cules');
+    socket.emit('message' , msg);
+    socket.broadcast.emit('message' , 'A new user has joined Cules');
      socket.on('sendMessage' , (txt , callback)=> {
         //   console.log(txt);
         //  let's have bad words thing 
@@ -33,7 +33,7 @@ io.on('connection' , (socket)=>{
             }
 
 
-          io.emit('rohit' , txt);
+          io.emit('message' , txt);
           callback(' Delivered!!');  // we have set acknowledgemnt to be sent to the one who is emitting , it process the data , then call that function . 
      })
     //  emitted by chat.js for sharing it's all cordinates.
@@ -42,7 +42,10 @@ io.on('connection' , (socket)=>{
             // io.emit('rohit' , `Location: ${obj.lat} , ${obj.long}`);
             //  to send map as well , use https://google.com/maps?q=0,0 
             // q means lat = 0 , long = 0;
-            io.emit('rohit' , `https://google.com/maps?q=${obj.lat},${obj.long}`);
+            // io.emit('message' , `https://google.com/maps?q=${obj.lat},${obj.long}`);
+            // callback();
+            //  we are going to emit different event as different params , for ourself
+            io.emit('locationMessage' , `https://google.com/maps?q=${obj.lat},${obj.long}`);
             callback();
      })
 
