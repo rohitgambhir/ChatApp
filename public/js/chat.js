@@ -8,12 +8,16 @@ const $sendLocation = document.querySelector('#send-location');
 // location where to message be put on 
 const $messages = document.querySelector('#messages');
 
-// Templates 
+// Templates
+
 // script ke andr wali html hai ye .
 const messageTemplate=document.querySelector('#message-template').innerHTML;
 const locationTemplate=document.querySelector('#location-template').innerHTML;
 
-
+// Options join page bnaane ke baad ,console mh location.search krenge toh , jo username aur konsa room mh entry hui hai uski info , hme miljaayegi , things will be done .!
+const {username , room}= Qs.parse(location.search , {ignoreQueryPrefix : true}) ;
+// it will delete ? from location.search from prefix.
+// ab username aur room ko backend pe bhejdenge emit at bottom of file .
 
 
 // we get this because ,
@@ -41,6 +45,10 @@ socket.on('locationMessage' , (url)=>{
     });
     $messages.insertAdjacentHTML('beforeend' , html);
  });
+
+
+
+
 
 socket.on('location' , (obj)=>{
      console.log(obj.lat);
@@ -108,3 +116,5 @@ document.querySelector('#send-location').addEventListener('click' , () => {
 
 
 // for bad words , simply install npm install bad-words and then import it to your server and then from there we will send that this is bad or good .
+
+socket.emit('join' , {username , room});

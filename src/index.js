@@ -23,12 +23,19 @@ io.on('connection' , (socket)=>{
     // server is emitting to particular client , the message of welcome , 
     // to send to every other client use io.emit
     // socket.emit('message' , msg)
-    socket.emit('message' , generateMessage(msg));
-    // we will get object and object in browser , as this is object  , need to adjust on client.js .
+    // socket.emit('message' , generateMessage(msg));
+    // we will get object and object in browser , as this is object  , need to adjust on client.js . now this is emitted to everyone , now we just want it to be room specific , so commenting and adding in join event after joining rooms .
 
-    // send object not simple string 
-    socket.broadcast.emit('message' , generateMessage('A new user has joined Cules'));
+    // send object not simple string  , and now also room specific so going to comment from here , 
+    // socket.broadcast.emit('message' , generateMessage('A new user has joined Cules'));
+        socket.on('join' , ({username , room})=>{
+            socket.join(room); // this is inbuilt provided to join the room 
 
+            socket.emit('message' , generateMessage(msg));
+            socket.broadcast.to(room).emit('message' , generateMessage(`${username} has joined`));
+        })
+        // socket.emit , io.emit , socket.broadcast.emit.
+        // io.to.emit , socket.broadcast.to.emit .  for rooms .
      socket.on('sendMessage' , (txt , callback)=> {
         //   console.log(txt);
         //  let's have bad words thing 

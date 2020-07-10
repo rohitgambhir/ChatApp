@@ -6,57 +6,17 @@
       <link rel="stylesheet" href="/css/styles.min.css">
     </head>
     <body>
-        <div class="chat">
-            <div class="chat__sidebar"></div>
-            <div class="chat__main">
-                    
-                Chat Mate
-        <div id="messages" class="chat__messages">
-           <!-- we will render here messages of screen OR LOCATIONS-->
-        </div>
-        <hr>
-        <div class="compose">
-            
-            <form id="signup">
-                <input placeholder="Type a Message">
-                <button>Send</button>
-            </form>
-            <button id="send-location">Send Location</button>
-            <!-- to render content using mustache library , we have script tag and html inside of it , we given type to script tag .don't forget to install these libraries from  files.mead.io/chatlibs -->
-        </div>
-        
+        <div class="centered-form">
+            <div class="centered-form__box">
+                <h1>Join</h1>
+                <form action="./chat.html">
+                    <label>Display Name</label>
+                    <input type="text" name="username" placeholder="Display Name" required>
+                    <label>Chat Room</label>
+                    <input type="text" name="room" placeholder="Chat Room" required>
+                    <button>Join</button>
+                </form>
             </div>
         </div>
-        
-        <script id="message-template" type="text/html">
-
-            <div class="message">
-                <p>
-                    <span class="message__name">Some user Name</span>
-                    <span class="message__meta">{{createdAt}}</span>
-                </p>
-                <!-- <p>This is a message</p> -->
-                <p>{{message}}</p>
-                <!-- this is the params we are going to get from (client side)-> to server(index.js) file emit anything and that (client.js) is listening for it and it renders it as it wants -->
-                <!-- we will get timestamp , so moment library will help us , go to moment documentation , make changes in chat.js   -->
-        </div>
-     </script>
-     <script id ="location-template" type="text/html">
-         <div class="message">
-            <p>
-                <span class="message__name">Some user Name</span>
-                <span class="message__meta">{{createdAt}}</span>
-            </p>
-             <a href="{{url}}" target="_blank">My Current Location</a>
-         </div>
-     </script>
-     <!-- this is that ,  we will put dynamic values inside this and then we need to render it on screen , so above we have made something called a div where will send these messages on page. -->
-
-        
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.6.0/qs.min.js"></script>
-        <script src="socket.io/socket.io.js"></script>
-        <script src="js/chat.js"></script>
     </body>
 </html>
