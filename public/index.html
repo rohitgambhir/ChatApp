@@ -1,32 +1,52 @@
 <!DOCTYPE html>
 <html>
     <head>
-
+      <title>Chat Mate</title>
+      <link rel="icon" href="/img/favicon.png">
+      <link rel="stylesheet" href="/css/styles.min.css">
     </head>
     <body>
-        chat app;
-        <div id="messages">
+        <div class="chat">
+            <div class="chat__sidebar"></div>
+            <div class="chat__main">
+                    
+                Chat Mate
+        <div id="messages" class="chat__messages">
            <!-- we will render here messages of screen OR LOCATIONS-->
         </div>
         <hr>
-        <form id="signup">
-            <input>
-            <button>Send</button>
-        </form>
-        <button id="send-location">Send Location</button>
-        <!-- to render content using mustache library , we have script tag and html inside of it , we given type to script tag .don't forget to install these libraries from  files.mead.io/chatlibs -->
+        <div class="compose">
+            
+            <form id="signup">
+                <input placeholder="Type a Message">
+                <button>Send</button>
+            </form>
+            <button id="send-location">Send Location</button>
+            <!-- to render content using mustache library , we have script tag and html inside of it , we given type to script tag .don't forget to install these libraries from  files.mead.io/chatlibs -->
+        </div>
+        
+            </div>
+        </div>
+        
         <script id="message-template" type="text/html">
 
-            <div>
+            <div class="message">
+                <p>
+                    <span class="message__name">Some user Name</span>
+                    <span class="message__meta">{{createdAt}}</span>
+                </p>
                 <!-- <p>This is a message</p> -->
-                <p>{{createdAt}}-{{message}}</p>
+                <p>{{message}}</p>
                 <!-- this is the params we are going to get from (client side)-> to server(index.js) file emit anything and that (client.js) is listening for it and it renders it as it wants -->
                 <!-- we will get timestamp , so moment library will help us , go to moment documentation , make changes in chat.js   -->
         </div>
      </script>
      <script id ="location-template" type="text/html">
-         <div>
-             {{createdAt}}-
+         <div class="message">
+            <p>
+                <span class="message__name">Some user Name</span>
+                <span class="message__meta">{{createdAt}}</span>
+            </p>
              <a href="{{url}}" target="_blank">My Current Location</a>
          </div>
      </script>

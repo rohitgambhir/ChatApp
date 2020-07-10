@@ -34,7 +34,7 @@ socket.on('message' , (msg)=>{
 })
 // url is now object
 socket.on('locationMessage' , (url)=>{
-    console.log(url);
+    console.log(url.url);
     const html = Mustache.render(locationTemplate,{
         url:url.url,
         createdAt:moment(url.createdAt).format('h:mm a') // the url we have defined in index.html wants to have this url which server is sending to it , which client had sent to server .
