@@ -19,13 +19,14 @@
 
             <div>
                 <!-- <p>This is a message</p> -->
-                <p>{{message}}</p>
+                <p>{{createdAt}}-{{message}}</p>
                 <!-- this is the params we are going to get from (client side)-> to server(index.js) file emit anything and that (client.js) is listening for it and it renders it as it wants -->
-                
+                <!-- we will get timestamp , so moment library will help us , go to moment documentation , make changes in chat.js   -->
         </div>
      </script>
      <script id ="location-template" type="text/html">
          <div>
+             {{createdAt}}-
              <a href="{{url}}" target="_blank">My Current Location</a>
          </div>
      </script>

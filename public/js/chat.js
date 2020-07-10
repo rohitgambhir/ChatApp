@@ -20,19 +20,24 @@ const locationTemplate=document.querySelector('#location-template').innerHTML;
 // client is listening of event of message which server must be emitting and with event data , so we print it on client side.
 // remember that , 'rohit' path is equivalent to 'message' ,as we know that written in line 20 , now where we want client to see that ? we can control that . 
 
+// now this msg is object after utils file and emiting object from index.js file .
 socket.on('message' , (msg)=>{
     console.log(msg);
     const html = Mustache.render(messageTemplate,{
-        message:msg
+        message:msg.text,
+        // createdAt: msg.createdAt
+        createdAt:moment(msg.createdAt).format('h:mm a')
     });
     $messages.insertAdjacentHTML('beforeend' , html);
     // with this much 24 line , we are able to render the script tag html to our client side html . we want text of input to be rendered , so we need to inject our text to that script tag ,where is that text ? it's  present inside , emiting send button .i guess , but we will take it initially and inject it to script id = "message-template" having html.line no 24 will pass params to index.html which is to be rendered.
 
 })
+// url is now object
 socket.on('locationMessage' , (url)=>{
     console.log(url);
     const html = Mustache.render(locationTemplate,{
-        url:url // the url we have defined in index.html wants to have this url which server is sending to it , which client had sent to server .
+        url:url.url,
+        createdAt:moment(url.createdAt).format('h:mm a') // the url we have defined in index.html wants to have this url which server is sending to it , which client had sent to server .
     });
     $messages.insertAdjacentHTML('beforeend' , html);
  });

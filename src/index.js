@@ -3,6 +3,7 @@
 const express = require('express');
 const socketio = require('socket.io') ;
 const Filter = require('bad-words');
+const {generateMessage , generateLocationMessage} = require('./utils/messages');
 // this create instance of websocket to work with our server , it gives us a function back , to work in this server , we need to call it .
 const app = express();
 // create http ,http library and method available on it , led us create a server , though express do it underhood.
@@ -22,8 +23,12 @@ io.on('connection' , (socket)=>{
     // server is emitting to particular client , the message of welcome , 
     // to send to every other client use io.emit
     // socket.emit('message' , msg)
-    socket.emit('message' , msg);
-    socket.broadcast.emit('message' , 'A new user has joined Cules');
+    socket.emit('message' , generateMessage(msg));
+    // we will get object and object in browser , as this is object  , need to adjust on client.js .
+
+    // send object not simple string 
+    socket.broadcast.emit('message' , generateMessage('A new user has joined Cules'));
+
      socket.on('sendMessage' , (txt , callback)=> {
         //   console.log(txt);
         //  let's have bad words thing 
@@ -32,8 +37,8 @@ io.on('connection' , (socket)=>{
                  return callback('Profanity is not allowed!');
             }
 
-
-          io.emit('message' , txt);
+           
+          io.emit('message' , generateMessage(txt));
           callback(' Delivered!!');  // we have set acknowledgemnt to be sent to the one who is emitting , it process the data , then call that function . 
      })
     //  emitted by chat.js for sharing it's all cordinates.
@@ -45,7 +50,7 @@ io.on('connection' , (socket)=>{
             // io.emit('message' , `https://google.com/maps?q=${obj.lat},${obj.long}`);
             // callback();
             //  we are going to emit different event as different params , for ourself
-            io.emit('locationMessage' , `https://google.com/maps?q=${obj.lat},${obj.long}`);
+            io.emit('locationMessage' , generateLocationMessage(`https://google.com/maps?q=${obj.lat},${obj.long}`));
             callback();
      })
 
