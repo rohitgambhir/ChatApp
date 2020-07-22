@@ -13,6 +13,7 @@ const $messages = document.querySelector('#messages');
 // script ke andr wali html hai ye .
 const messageTemplate=document.querySelector('#message-template').innerHTML;
 const locationTemplate=document.querySelector('#location-template').innerHTML;
+const sidebarTemplate=document.querySelector('#sidebar-template').innerHTML;
 
 // Options join page bnaane ke baad ,console mh location.search krenge toh , jo username aur konsa room mh entry hui hai uski info , hme miljaayegi , things will be done .!
 const {username , room}= Qs.parse(location.search , {ignoreQueryPrefix : true}) ;
@@ -23,6 +24,45 @@ const {username , room}= Qs.parse(location.search , {ignoreQueryPrefix : true}) 
 // we get this because ,
 // client is listening of event of message which server must be emitting and with event data , so we print it on client side.
 // remember that , 'rohit' path is equivalent to 'message' ,as we know that written in line 20 , now where we want client to see that ? we can control that . 
+
+// auto scroll 
+const autoscroll = () => {
+    //  new message element
+    const $newMessage = $messages.lastElementChild
+
+ // height of the new message like margin + content 
+    // this give us the styles of the new message , can console it , it gives string of marginBottom : 16px , we need to convert it to integer.
+     const newMessageStyles= getComputedStyle($newMessage)
+     const newMessageMargin = parseInt(newMessageStyles.marginBottom)
+    //   console.log(newMessageMargin);
+    // this gives just height of content , we need margin as well 
+    const newMessageHeight = $newMessage.offsetHeight + newMessageMargin;
+
+// Visible height , doesn't change ,generally ,  for mobile it is fixed.
+
+const visibleHeight =$messages.offsetHeight;
+
+// ek hai container ki size , jo ki saare msgs lere hai , toh vo jyaada ho skti hai . get that
+
+// height of messages container
+const containerHeight=$messages.scrollHeight;
+
+// how far have i scrolled ?(scrollTop top of the scroll bar and start of content ka difference). , visible height plus krdenge toh pta chljaayega , kitna bottom ke paas hai ,
+const scrollOffset = ($messages.scrollTop + visibleHeight)*2;
+
+// message aagya , phir ye chlra hai , toh message ke aane se pehle ki height agr , km hai , puri scrolloffset se mtlb hm log pehle hi neeche thea ,toh auto scroll krlo .
+if(containerHeight - newMessageHeight < scrollOffset){
+    //  mtlb bottom pe hi hai , toh autoscroll to bottom after adding new message.
+    // this will take us down.
+    $messages.scrollTop=$messages.scrollHeight;
+
+}
+
+
+
+
+
+}
 
 // now this msg is object after utils file and emiting object from index.js file .
 socket.on('message' , (msg)=>{
@@ -35,6 +75,7 @@ socket.on('message' , (msg)=>{
     });
     $messages.insertAdjacentHTML('beforeend' , html);
     // with this much 24 line , we are able to render the script tag html to our client side html . we want text of input to be rendered , so we need to inject our text to that script tag ,where is that text ? it's  present inside , emiting send button .i guess , but we will take it initially and inject it to script id = "message-template" having html.line no 24 will pass params to index.html which is to be rendered.
+    autoscroll();
 
 })
 // url is now object
@@ -46,8 +87,17 @@ socket.on('locationMessage' , (url)=>{
         createdAt:moment(url.createdAt).format('h:mm a') // the url we have defined in index.html wants to have this url which server is sending to it , which client had sent to server .
     });
     $messages.insertAdjacentHTML('beforeend' , html);
+    autoscroll();
  });
-
+socket.on('roomData' , ({room , users})=>{
+      console.log(room);
+      console.log(users);
+      const html = Mustache.render(sidebarTemplate ,{
+          room , 
+          users
+      })
+      document.querySelector('#sidebar').innerHTML=html;
+})
 
 
 
