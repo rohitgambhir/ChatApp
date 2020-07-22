@@ -28,6 +28,7 @@ const {username , room}= Qs.parse(location.search , {ignoreQueryPrefix : true}) 
 socket.on('message' , (msg)=>{
     console.log(msg);
     const html = Mustache.render(messageTemplate,{
+        username:msg.username,
         message:msg.text,
         // createdAt: msg.createdAt
         createdAt:moment(msg.createdAt).format('h:mm a')
@@ -40,6 +41,7 @@ socket.on('message' , (msg)=>{
 socket.on('locationMessage' , (url)=>{
     console.log(url.url);
     const html = Mustache.render(locationTemplate,{
+        username:url.username,
         url:url.url,
         createdAt:moment(url.createdAt).format('h:mm a') // the url we have defined in index.html wants to have this url which server is sending to it , which client had sent to server .
     });
@@ -81,6 +83,9 @@ if(x){
          
     });
 }
+// socket.emit('disconnect' ,()=>{
+//   console.log('user disconnected');
+// })
 document.querySelector('#send-location').addEventListener('click' , () => {
     //  all browsers don't support it
     if(!navigator.geolocation){
@@ -117,4 +122,9 @@ document.querySelector('#send-location').addEventListener('click' , () => {
 
 // for bad words , simply install npm install bad-words and then import it to your server and then from there we will send that this is bad or good .
 
-socket.emit('join' , {username , room});
+socket.emit('join' , {username , room} , (error)=>{
+   if(error){
+         alert(error);
+         location.href='/';
+   }
+});

@@ -49,18 +49,34 @@ addUser({
     username: 'Andre   ',
     room: 'South'
 })
-console.log(users);
-const removedUser=removeUser(22)
-console.log(users)
-console.log(removedUser)
 
 
 
+const getUser=(id)=>{
+    const index = users.findIndex((user)=>{
+        return user.id===id;
+    })
+    if(index === -1){
+         return {
+             error: 'There is no user with this id'
+         }
+    }
+    else {
+         return users[index];
+    }
+}
 
+const getUsersInRoom=(room)=>{
+     return users.filter((user)=>{
+         return user.room === room;
+     })
 
-const res = addUser({
-    id:33,
-    username:'andrre',
-    room:'south'
-})
-console.log(res);
+}
+const sameroom = getUsersInRoom('southh');
+// console.log(sameroom);
+module.exports = {
+    addUser,
+    removeUser,
+    getUser,
+    getUsersInRoom
+}
